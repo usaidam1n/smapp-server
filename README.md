@@ -1,36 +1,35 @@
 # Smappcare API
-
-A comprehensive healthcare management backend service that enables users to manage their medical profiles, track medication schedules, and store prescription information securely.
-
-## About
-
-Smappcare is a Node.js/Express-based REST API designed for healthcare applications. It provides a complete backend solution for managing patient data, medicine reminders, prescriptions, and user authentication. The API is built with security in mind, featuring JWT-based authentication, password encryption, and role-based access control.
-
-## Features
-
-- **User Authentication**: Secure signup, signin, and signout with JWT tokens and bcrypt password hashing
-- **Patient Profiles**: Store and manage detailed patient information including demographics, healthcare metrics, and contact details
-- **Medicine Management**: Create, track, and retrieve medication schedules with dosage and timing information
-- **Prescription Management**: Store and manage prescription data with image attachments
-- **Role-Based Access Control**: Support for different user roles (standard users and admins)
-- **Secure API**: CORS enabled, cookie-session management, and JWT verification middleware
-- **MongoDB Integration**: Persistent data storage using MongoDB Atlas with Mongoose ODM
-
-## Architecture Overview
-
 ```mermaid
 flowchart LR
    subgraph Clients[Clients]
-      Mobile[Mobile / Web Clients]
+      Mobile["Mobile / Web Clients"]
    end
 
-   subgraph Server[Express Server]
+   subgraph Server["Express Server"]
       direction TB
-      Routes[/Routes (auth, user, etc.)/]
-      Middleware[[Middleware\n(authJwt, verifySignUp, CORS, session, body-parser)]]
-      Controllers[[Controllers\n(auth.controller, user handlers)]]
-      Models[[Mongoose Models\n(User, Patient, Medicine, Prescription)]]
+      Routes["Routes (auth, user, etc.)"]
+      Middleware["Middleware\n(authJwt, verifySignUp, CORS, session, body-parser)"]
+      Controllers["Controllers\n(auth.controller, user handlers)"]
+      Models["Mongoose Models\n(User, Patient, Medicine, Prescription)"]
    end
+
+   subgraph DB["MongoDB"]
+      Collections["users, medicines, prescriptions, patientprofiles"]
+   end
+
+   Mobile --> Routes
+   Routes --> Middleware
+   Middleware --> Controllers
+   Controllers --> Models
+   Models --> Collections
+
+   Users["User"] -->|has many| Medicines["Medicine"]
+   Users -->|has many| Prescriptions["Prescription"]
+
+   note right of Collections
+      Stored in MongoDB Atlas
+   end
+```
 
    subgraph DB[MongoDB]
       Collections[(users, medicines, prescriptions, patientprofiles)]
