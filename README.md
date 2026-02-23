@@ -16,6 +16,41 @@ Smappcare is a Node.js/Express-based REST API designed for healthcare applicatio
 - **Secure API**: CORS enabled, cookie-session management, and JWT verification middleware
 - **MongoDB Integration**: Persistent data storage using MongoDB Atlas with Mongoose ODM
 
+## Architecture Overview
+
+```mermaid
+flowchart LR
+   subgraph Clients[Clients]
+      Mobile[Mobile / Web Clients]
+   end
+
+   subgraph Server[Express Server]
+      direction TB
+      Routes[/Routes (auth, user, etc.)/]
+      Middleware[[Middleware\n(authJwt, verifySignUp, CORS, session, body-parser)]]
+      Controllers[[Controllers\n(auth.controller, user handlers)]]
+      Models[[Mongoose Models\n(User, Patient, Medicine, Prescription)]]
+   end
+
+   subgraph DB[MongoDB]
+      Collections[(users, medicines, prescriptions, patientprofiles)]
+   end
+
+   Mobile --> Routes
+   Routes --> Middleware
+   Middleware --> Controllers
+   Controllers --> Models
+   Models --> Collections
+
+   %% Relationships
+   Users[(User)] -->|has many| Medicines[(Medicine)]
+   Users -->|has many| Prescriptions[(Prescription)]
+
+   note right of Collections
+      Stored in MongoDB Atlas
+   end
+```
+
 ## Technology Stack
 
 - **Runtime**: Node.js (v14.0.0 or higher)
