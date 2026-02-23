@@ -25,29 +25,6 @@ flowchart LR
 
    Users["User"] -->|has many| Medicines["Medicine"]
    Users -->|has many| Prescriptions["Prescription"]
-
-   note right of Collections
-      Stored in MongoDB Atlas
-   end
-```
-
-   subgraph DB[MongoDB]
-      Collections[(users, medicines, prescriptions, patientprofiles)]
-   end
-
-   Mobile --> Routes
-   Routes --> Middleware
-   Middleware --> Controllers
-   Controllers --> Models
-   Models --> Collections
-
-   %% Relationships
-   Users[(User)] -->|has many| Medicines[(Medicine)]
-   Users -->|has many| Prescriptions[(Prescription)]
-
-   note right of Collections
-      Stored in MongoDB Atlas
-   end
 ```
 
 ## Technology Stack
